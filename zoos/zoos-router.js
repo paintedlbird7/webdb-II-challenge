@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 
 
 router.get('/:id', (req, res) => {
-  // retrieve a role by id
+  // retrieve a zoo by id
   db('zoos') // returns a promise
     .whereExists({id: req.params.id})
     .first ()
@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
       if(zoo) {
         res.status(200).json(zoo)
       } else {
-        res.status(404).json({ message: 'Role not found'})
+        res.status(404).json({ message: 'Zoo not found'})
         }
       })
       .catch(err => {
@@ -44,14 +44,14 @@ router.get('/:id', (req, res) => {
 
 
 router.post('/', async (req, res) => {
-  // add a role to the database
+  // add a zoo to the database
   try {
     const [id] = await db('zoos').insert(req.body)
-    const role = await db('zoos')
+    const zoo = await db('zoos')
     .where({ id })
     .first()
 
-    res.status(201).json(role)
+    res.status(201).json(zoo)
   } catch (error) {
     res.status(500).json(error)
   }
@@ -70,11 +70,11 @@ router.put('/:id',  (req, res) => {
       db('zoos')
       .where({ id: req.params.id })
       .first()
-      .then(role => {
-        res.status(200).json(role)
+      .then(zoo => {
+        res.status(200).json(zoo)
       })
     } else {
-      res.status(404).json({ message: 'Role not found'})
+      res.status(404).json({ message: 'Zoo not found'})
     }   
   })
   .catch(error => {
@@ -87,7 +87,7 @@ router.put('/:id',  (req, res) => {
 
 
 router.delete('/:id', (req, res) => {
-  // remove zoos (inactivate the role)
+  // remove zoos (inactivate the zoo)
   db('zoos')
   .where({ id: req.params.id })
   .del()
@@ -95,7 +95,7 @@ router.delete('/:id', (req, res) => {
     if (count > 0) {
       res.status(204).end()
     }else{
-      res.status(404).json ({ message: 'Role not found'})
+      res.status(404).json ({ message: 'Zoo not found'})
 
     }
     })
